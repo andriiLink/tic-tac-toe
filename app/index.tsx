@@ -5,7 +5,7 @@ const router = useRouter();
 
 export default function Page() {
   return (
-    <View>
+    <View style={styles.container}>
       <Pressable
         onPress={() => router.push('/HeroSelectScreen')}
       >
