@@ -1,16 +1,24 @@
 import { useRouter } from "expo-router";
-import { Pressable, StyleSheet, Text, View } from "react-native";
-
-const router = useRouter();
+import { Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function Page() {
+  const router = useRouter();
+
   return (
     <View style={styles.container}>
-      <Pressable
+      <TouchableOpacity
+        style={styles.playButtonWrapper}
         onPress={() => router.push('/HeroSelectScreen')}
       >
-        <Text>Play</Text>
-      </Pressable>
+        <Text style={styles.text}>Play</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.settingsButtonWrapper}
+        onPress={() => router.push('/SettingsScreen')}
+      >
+        <Text style={styles.text}>Settings</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -18,21 +26,36 @@ export default function Page() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    padding: 24,
+    backgroundColor: 'transparent',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 50,
   },
-  main: {
-    flex: 1,
-    justifyContent: "center",
-    maxWidth: 960,
-    marginHorizontal: "auto",
+
+  playButtonWrapper: {
+    backgroundColor: '#fcba03',
+    borderColor: '#0320fc',
+    borderWidth: 4,
+    borderRadius: 10,
+
+    paddingVertical: 20,
+    paddingHorizontal: 40,
   },
-  title: {
-    fontSize: 64,
-    fontWeight: "bold",
+
+  settingsButtonWrapper: {
+    backgroundColor: '#fff',
+    borderColor: '#0320fc',
+    borderWidth: 4,
+    borderRadius: 10,
+
+    paddingVertical: 20,
+    paddingHorizontal: 40,
   },
-  subtitle: {
-    fontSize: 36,
-    color: "#38434D",
+
+  text: {
+    color: '#0320fc',
+    fontWeight: 800,
+    fontSize: 20,
   },
 });

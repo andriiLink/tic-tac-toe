@@ -11,6 +11,13 @@
     "ios": {
       "supportsTablet": true
     },
+    "androidStatusBar": {
+      "hidden": true
+    },
+    "andoroinNavigationBar": {
+      "visible": false,
+      "sticky": true
+    },
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",

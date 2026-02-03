@@ -79,14 +79,17 @@ export default function GameScreen() {
       const [a, b, c] = winLine;
 
       if (currBoard[a] && currBoard[a] === currBoard[b] && currBoard[a] === currBoard[c]) {
+        // resetGame();
         return currBoard[a]
       }
     }
 
     if (!currBoard.includes(null)) {
+      // resetGame();
       return 'draw';
     }
 
+    // resetGame();
     return null;
   };
 
@@ -96,16 +99,16 @@ export default function GameScreen() {
     setWinner(null);
   };
 
-  const getCellSign = (item: string | null) => {
-    console.log('changed');
-    if (item === 'player') {
-      return 'X'
-    } else if (item === 'ai') {
-      return 'O'
-    } else {
-      return 'null';
-    }
-  };
+  // const getCellSign = (item: string | null) => {
+  //   console.log('changed');
+  //   if (item === 'player') {
+  //     return 'X'
+  //   } else if (item === 'ai') {
+  //     return 'O'
+  //   } else {
+  //     return 'null';
+  //   }
+  // };
 
   return (
     <View>

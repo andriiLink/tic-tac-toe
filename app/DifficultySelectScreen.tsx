@@ -1,7 +1,8 @@
-import { View, Text, Pressable } from 'react-native';
+import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
 
 import { useHeroAndDifficulty } from '../src/hooks/useHeroAndDifficulty';
+import { GoBackButton } from '../src/components/GoBackButton';
 
 export default function DifficultySelect () {
   const { setDifficulty } = useHeroAndDifficulty();
@@ -11,6 +12,9 @@ export default function DifficultySelect () {
   return (
     <View>
       <View>
+        <View>
+          <GoBackButton backPath={'/HeroSelectScreen'} />
+        </View>
         <Text>Choose the difficulty</Text>
         {
           difficulties.map((item) => {
@@ -32,3 +36,9 @@ export default function DifficultySelect () {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  goBackButtonWrapper: {
+
+  },
+});

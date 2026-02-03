@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
-import { View, Text, FlatList, Pressable } from 'react-native';
+import { View, Text, FlatList, Pressable, StyleSheet, useWindowDimensions } from 'react-native';
 
 import { useHeroAndDifficulty } from '../src/hooks/useHeroAndDifficulty';
 import { HEROES } from '../src/constants/heroes';
-import { HeroRoundIcon } from '../src/components/HeroRoundIcon'
-import { HeroType } from '@/src/types/HeroType';
+import { HeroRoundIcon } from '../src/components/HeroRoundIcon';
+import { GoBackButton } from '../src/components/GoBackButton';
+// import { HeroType } from '@/src/types/HeroType';
 
 const router = useRouter();
+const {width, height} = useWindowDimensions();
 
 export default function HeroSelectScreen() {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -23,7 +25,17 @@ export default function HeroSelectScreen() {
 
   return (
     <View>
-      <View>
+      <View style={styles.goBackButtonContainer}>
+        <Pressable>
+          <GoBackButton backPath={'/'} />
+        </Pressable>
+      </View>
+      <View style={styles.container}>
+        <Pressable
+          onPress={() => router.push('/')}
+        >
+          <Text>Go Back</Text>
+        </Pressable>
         <Text>Select the hero</Text>
         <FlatList
           data={HEROES}
@@ -33,7 +45,7 @@ export default function HeroSelectScreen() {
           snapToInterval={ITEM_WIDTH}
           decelerationRate='fast'
           keyExtractor={(item) => item.id.toString()}
-          contentContainerStyle={{ paddingHorizontal: (300 - ITEM_WIDTH) / 2 }}
+          contentContainerStyle={{ paddingHorizontal: (width / 2) - (ITEM_WIDTH / 2)}}
           renderItem={({ item, index }) => {
             return (
               <Pressable
@@ -52,3 +64,15 @@ export default function HeroSelectScreen() {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  goBackButtonContainer: {
+    width: 10,
+    height: 10,
+  },
+});
