@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
-import { View, Text, FlatList, Pressable, StyleSheet, useWindowDimensions } from 'react-native';
+import { View, Text, FlatList, Pressable, TouchableOpacity, StyleSheet, useWindowDimensions } from 'react-native';
 
 import { useHeroAndDifficulty } from '../src/hooks/useHeroAndDifficulty';
 import { HEROES } from '../src/constants/heroes';
@@ -9,7 +9,7 @@ import { GoBackButton } from '../src/components/GoBackButton';
 // import { HeroType } from '@/src/types/HeroType';
 
 const router = useRouter();
-const {width, height} = useWindowDimensions();
+const { width, height } = useWindowDimensions();
 
 export default function HeroSelectScreen() {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -24,28 +24,25 @@ export default function HeroSelectScreen() {
   };
 
   return (
-    <View>
-      <View style={styles.goBackButtonContainer}>
-        <Pressable>
-          <GoBackButton backPath={'/'} />
-        </Pressable>
+    <View style={styles.container}>
+      <View style={styles.goBackButtonWrapper}>
+        <GoBackButton backPath={'/'} />
       </View>
-      <View style={styles.container}>
-        <Pressable
-          onPress={() => router.push('/')}
-        >
-          <Text>Go Back</Text>
-        </Pressable>
-        <Text>Select the hero</Text>
+
+      <View style={styles.contentWrapper}>
+        <View style={styles.selectHeroTextWrapper}>
+          <Text style={styles.text}>Select the hero</Text>
+        </View>
         <FlatList
           data={HEROES}
           horizontal
           showsHorizontalScrollIndicator={false}
           onScroll={onScroll}
+          style={styles.flatList}
           snapToInterval={ITEM_WIDTH}
           decelerationRate='fast'
           keyExtractor={(item) => item.id.toString()}
-          contentContainerStyle={{ paddingHorizontal: (width / 2) - (ITEM_WIDTH / 2)}}
+          contentContainerStyle={{ paddingHorizontal: (width / 2) - (ITEM_WIDTH / 2) }}
           renderItem={({ item, index }) => {
             return (
               <Pressable
@@ -67,12 +64,29 @@ export default function HeroSelectScreen() {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+  },
+
+  contentWrapper: {
+    justifyContent: 'center',
+  },
+
+  flatList: {
+    paddingVertical: 40,
+  },
+
+  goBackButtonWrapper: {
+  },
+
+  selectHeroTextWrapper: {
+    paddingBottom: 50,
     justifyContent: 'center',
     alignItems: 'center',
   },
 
-  goBackButtonContainer: {
-    width: 10,
-    height: 10,
+  text: {
+    color: '#fff',
+    fontSize: 50,
+    fontWeight: 800,
   },
 });
