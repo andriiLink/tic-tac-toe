@@ -13,7 +13,7 @@ const { width, height } = useWindowDimensions();
 
 export default function HeroSelectScreen() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const { setHeroId } = useHeroAndDifficulty();
+  const { setHero } = useHeroAndDifficulty();
 
   const ITEM_WIDTH = 150;
 
@@ -47,7 +47,7 @@ export default function HeroSelectScreen() {
             return (
               <Pressable
                 onPress={() => {
-                  setHeroId(item.id);
+                  setHero(item);
                   console.log(item.name);
                   router.push('/DifficultySelectScreen');
                 }}

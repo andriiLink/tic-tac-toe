@@ -1,24 +1,25 @@
 import { createContext, useState } from "react";
+import { HeroType } from "../types/HeroType";
 
 type HeroesAndDiffType = {
-  heroId: number | null,
+  hero: HeroType | null,
   difficulty: string | null,
 
-  setHeroId: (id: number) => void; 
+  setHero: (hero: HeroType) => void; 
   setDifficulty: (diff: string) => void;
 }
 
 export const HeroAndDifficultyContext = createContext<HeroesAndDiffType | null>(null);
 
 export function HeroAndDifficultyContextProvider ({ children }: {children: React.ReactNode}) {
-  const [heroId, setHeroId] = useState<number | null>(null);
+  const [hero, setHero] = useState<HeroType | null>(null);
   const [difficulty, setDifficulty] = useState<string | null>(null);
 
   const value: HeroesAndDiffType = {
-    heroId,
+    hero,
     difficulty,
 
-    setHeroId: (heroId: number) => setHeroId(heroId),
+    setHero: (hero: HeroType) => setHero(hero),
     setDifficulty: (diff: string) => setDifficulty(diff),
   };
 

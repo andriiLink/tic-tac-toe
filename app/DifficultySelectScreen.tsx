@@ -7,7 +7,6 @@ import { GoBackButton } from '../src/components/GoBackButton';
 export default function DifficultySelect() {
   const { setDifficulty } = useHeroAndDifficulty();
 
-  // const difficulties = ['easy', 'medium', 'hard'];
   const difficulties = [
     {
       level: 'easy',

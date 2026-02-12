@@ -1,13 +1,26 @@
 import { useState, useEffect } from 'react';
-import { View, Text, Pressable } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Modal } from 'react-native';
+
 import { useHeroAndDifficulty } from '../src/hooks/useHeroAndDifficulty';
+import { HeroRoundIcon } from '../src/components/HeroRoundIcon';
+import { HEROES } from '@/src/constants/heroes';
+import { HeroType } from '@/src/types/HeroType';
 
 export default function GameScreen() {
   const [board, setBoard] = useState<(string | null)[]>(Array(9).fill(null));
   const [winner, setWinner] = useState<string | null>(null);
   const [isPlayerMove, setIsPlayerMove] = useState<boolean>(true);
+  const [enemy, setEnemy] = useState<HeroType>();
+  const [modalVisible, setModalVisible] = useState(false);
 
-  const { heroId, difficulty } = useHeroAndDifficulty();
+  const { hero, difficulty } = useHeroAndDifficulty();
+
+  useEffect(() => {
+    const randomEnemyId = Math.round(Math.random() * 10);
+    console.log(randomEnemyId);
+    const randomEnemy = HEROES.find((item) => item.id === randomEnemyId)
+    setEnemy(randomEnemy);
+  }, []);
 
   useEffect(() => {
     if (!isPlayerMove && !winner) {
@@ -111,28 +124,95 @@ export default function GameScreen() {
   // };
 
   return (
-    <View>
+    <View style={styles.container}>
       <View>
         <Text>options</Text>
-        <Text>{heroId}</Text>
+        {/* <Text>{hero}</Text> */}
         <Text>{difficulty}</Text>
-
-        <View>
-          {
-            board.map((cell, index) => {
-              return (
-                <View key={index}>
-                  <Pressable
-                    onPress={() => { handleClick(index) }}
-                  >
-                    <Text>{cell === 'player' ? 'X' : cell === 'ai' ? 'O' : ' '}</Text>
-                  </Pressable>
-                </View>
-              );
-            })
-          }
-        </View>
       </View>
+
+      <View style={styles.board}>
+        {
+          board.map((cell, index) => {
+            return (
+              <TouchableOpacity
+                key={index}
+                style={[
+                  styles.cell,
+                  index < 6 && styles.bottomBorder,
+                  index % 3 !== 2 && styles.rightBorder,
+                ]}
+                onPress={() => { handleClick(index) }}
+              >
+                {
+                  (cell === 'player' && hero) ? (
+                    <HeroRoundIcon hero={hero} />
+                  ) : (
+                    (cell === 'ai' && enemy) && (<HeroRoundIcon hero={enemy} />)
+                  )
+                }
+
+              </TouchableOpacity>
+            );
+          })
+        }
+      </View>
+
+      <Modal
+        animationType='slide'
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View>
+          <Text> </Text>
+        </View>
+        <TouchableOpacity></TouchableOpacity>
+        <TouchableOpacity></TouchableOpacity>
+        <TouchableOpacity></TouchableOpacity>
+      </Modal>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  board: {
+    width: 300,
+
+    // justifyContent: 'center',
+    // alignItems: 'center',
+
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+
+  bottomBorder: {
+    borderBottomWidth: 10,
+    borderBottomColor: '#fff',
+  },
+
+  cell: {
+    height: 100,
+    width: 100,
+
+    justifyContent: 'center',
+    alignItems: 'center',
+
+    // backgroundColor: '#dfd',
+
+    // borderColor: '#000',
+    // borderWidth: 10,
+  },
+
+  container: {
+    flex: 1,
+
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  rightBorder: {
+    borderRightWidth: 10,
+    borderRightColor: '#fff',
+  },
+});

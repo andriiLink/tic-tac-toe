@@ -5,10 +5,10 @@ import { HeroType } from '../types/HeroType';
 
 type Props = {
   hero: HeroType,
-  isActive: boolean,
+  isActive?: boolean,
 };
 
-export const HeroRoundIcon: React.FC<Props> = ({ hero, isActive }) => {
+export const HeroRoundIcon: React.FC<Props> = ({ hero, isActive = false }) => {
   const scale = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
