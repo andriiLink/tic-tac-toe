@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Modal } from 'react-native';
+import { router } from 'expo-router';
 
 import { useHeroAndDifficulty } from '../src/hooks/useHeroAndDifficulty';
 import { HeroRoundIcon } from '../src/components/HeroRoundIcon';
@@ -17,15 +18,13 @@ export default function GameScreen() {
 
   useEffect(() => {
     const randomEnemyId = Math.round(Math.random() * 10);
-    console.log(randomEnemyId);
-    const randomEnemy = HEROES.find((item) => item.id === randomEnemyId)
+    const randomEnemy = HEROES.find((item) => item.id === randomEnemyId);
+  
     setEnemy(randomEnemy);
   }, []);
 
   useEffect(() => {
     if (!isPlayerMove && !winner) {
-      console.log('ais turn (effect)');
-
       const timer = setTimeout(() => {
         makeAiMove();
       }, 600);
@@ -41,7 +40,6 @@ export default function GameScreen() {
   ];
 
   const handleClick = (index: number) => {
-    console.log('clicked');
     if (board[index] || !isPlayerMove || winner) {
       return;
     }
@@ -58,18 +56,14 @@ export default function GameScreen() {
     } else {
       setIsPlayerMove(false);
     }
-
-    console.log('clicked 2');
   };
 
   const makeAiMove = () => {
-    console.log('ais turn topfunc')
     const emptyIndexs = board
       .map((item, index) => item === null ? index : null)
       .filter(item => item !== null) as number[];
 
     if (emptyIndexs.length > 0) {
-      console.log('in proces')
       const randomIndex = emptyIndexs[Math.floor(Math.random() * emptyIndexs.length)];
       const newBoard = [...board];
       newBoard[randomIndex] = 'ai';
@@ -92,17 +86,23 @@ export default function GameScreen() {
       const [a, b, c] = winLine;
 
       if (currBoard[a] && currBoard[a] === currBoard[b] && currBoard[a] === currBoard[c]) {
-        // resetGame();
+        setTimeout(() => {
+          console.log('setting modal visible');
+          setModalVisible(true);
+        }, 3000)
         return currBoard[a]
       }
     }
 
     if (!currBoard.includes(null)) {
-      // resetGame();
+      console.log('draw')
+      setTimeout(() => {
+        console.log('setting modal visible');
+        setModalVisible(true);
+      }, 3000)
       return 'draw';
     }
 
-    // resetGame();
     return null;
   };
 
@@ -111,17 +111,6 @@ export default function GameScreen() {
     setIsPlayerMove(true);
     setWinner(null);
   };
-
-  // const getCellSign = (item: string | null) => {
-  //   console.log('changed');
-  //   if (item === 'player') {
-  //     return 'X'
-  //   } else if (item === 'ai') {
-  //     return 'O'
-  //   } else {
-  //     return 'null';
-  //   }
-  // };
 
   return (
     <View style={styles.container}>
@@ -162,14 +151,38 @@ export default function GameScreen() {
         animationType='slide'
         transparent={true}
         visible={modalVisible}
+        style={styles.modalContainer}
         onRequestClose={() => setModalVisible(false)}
       >
         <View>
-          <Text> </Text>
+          <Text></Text>
         </View>
-        <TouchableOpacity></TouchableOpacity>
-        <TouchableOpacity></TouchableOpacity>
-        <TouchableOpacity></TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            resetGame();
+            setModalVisible(false);
+          }}
+        >
+          <Text>Play again!</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            resetGame();
+            router.push('/HeroSelectScreen');
+            setModalVisible(false);
+          }}
+        >
+          <Text>Change hero & difficulty</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            resetGame();
+            router.push('/')
+            setModalVisible(false);
+          }}
+        >
+          <Text>Exit</Text>
+        </TouchableOpacity>
       </Modal>
     </View>
   );
@@ -209,6 +222,10 @@ const styles = StyleSheet.create({
 
     justifyContent: 'center',
     alignItems: 'center',
+  },
+
+  modalContainer: {
+
   },
 
   rightBorder: {
