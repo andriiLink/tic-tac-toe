@@ -6,19 +6,24 @@ import { useHeroAndDifficulty } from '../src/hooks/useHeroAndDifficulty';
 import { HeroRoundIcon } from '../src/components/HeroRoundIcon';
 import { HEROES } from '@/src/constants/heroes';
 import { HeroType } from '@/src/types/HeroType';
+import { WinLoseDrawModal } from '@/src/components/WinLoseDrawModal';
 
 export default function GameScreen() {
   const [board, setBoard] = useState<(string | null)[]>(Array(9).fill(null));
   const [winner, setWinner] = useState<string | null>(null);
   const [isPlayerMove, setIsPlayerMove] = useState<boolean>(true);
-  const [enemy, setEnemy] = useState<HeroType>();
-  const [modalVisible, setModalVisible] = useState(false);
+  const [enemy, setEnemy] = useState<HeroType | null>(null);
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
 
   const { hero, difficulty } = useHeroAndDifficulty();
 
   useEffect(() => {
-    const randomEnemyId = Math.round(Math.random() * 10);
-    const randomEnemy = HEROES.find((item) => item.id === randomEnemyId);
+    let randomEnemyId = Math.round(Math.random() * 10);
+
+    if (randomEnemyId === hero?.id) {
+      randomEnemyId ++;
+    }
+    const randomEnemy = HEROES.find((item) => item.id === randomEnemyId) || null;
   
     setEnemy(randomEnemy);
   }, []);
@@ -114,12 +119,6 @@ export default function GameScreen() {
 
   return (
     <View style={styles.container}>
-      <View>
-        <Text>options</Text>
-        {/* <Text>{hero}</Text> */}
-        <Text>{difficulty}</Text>
-      </View>
-
       <View style={styles.board}>
         {
           board.map((cell, index) => {
@@ -147,43 +146,14 @@ export default function GameScreen() {
         }
       </View>
 
-      <Modal
-        animationType='slide'
-        transparent={true}
-        visible={modalVisible}
-        style={styles.modalContainer}
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View>
-          <Text></Text>
-        </View>
-        <TouchableOpacity
-          onPress={() => {
-            resetGame();
-            setModalVisible(false);
-          }}
-        >
-          <Text>Play again!</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            resetGame();
-            router.push('/HeroSelectScreen');
-            setModalVisible(false);
-          }}
-        >
-          <Text>Change hero & difficulty</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            resetGame();
-            router.push('/')
-            setModalVisible(false);
-          }}
-        >
-          <Text>Exit</Text>
-        </TouchableOpacity>
-      </Modal>
+      <WinLoseDrawModal 
+        modalVisible={modalVisible} 
+        onChangeVisible={setModalVisible}
+        winner={winner}
+        hero={hero}
+        enemy={enemy}
+        onResetGame={resetGame}
+      />
     </View>
   );
 };
@@ -210,11 +180,6 @@ const styles = StyleSheet.create({
 
     justifyContent: 'center',
     alignItems: 'center',
-
-    // backgroundColor: '#dfd',
-
-    // borderColor: '#000',
-    // borderWidth: 10,
   },
 
   container: {
@@ -222,10 +187,6 @@ const styles = StyleSheet.create({
 
     justifyContent: 'center',
     alignItems: 'center',
-  },
-
-  modalContainer: {
-
   },
 
   rightBorder: {

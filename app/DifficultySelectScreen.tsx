@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
   },
 
   chooseDifficultyWrapper: {
-    padding: 30,
+    alignItems: 'center',
   },
 
   difficultyList: {

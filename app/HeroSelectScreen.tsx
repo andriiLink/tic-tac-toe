@@ -6,7 +6,6 @@ import { useHeroAndDifficulty } from '../src/hooks/useHeroAndDifficulty';
 import { HEROES } from '../src/constants/heroes';
 import { HeroRoundIcon } from '../src/components/HeroRoundIcon';
 import { GoBackButton } from '../src/components/GoBackButton';
-// import { HeroType } from '@/src/types/HeroType';
 
 const router = useRouter();
 const { width, height } = useWindowDimensions();
@@ -72,14 +71,14 @@ const styles = StyleSheet.create({
   },
 
   flatList: {
-    paddingVertical: 40,
+    paddingVertical: height / 30,
   },
 
   goBackButtonWrapper: {
   },
 
   selectHeroTextWrapper: {
-    paddingBottom: 50,
+    paddingBottom: height / 50,
     justifyContent: 'center',
     alignItems: 'center',
   },
